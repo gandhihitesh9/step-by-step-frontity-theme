@@ -6,7 +6,7 @@ import List from "./list";
 import Post from "./post";
 import Page from "./page";
 
-const Root = ({ state }) => {
+const Root = ({ state, actions }) => {
     const data = state.source.get(state.router.link);
     return (
         <>
@@ -20,15 +20,21 @@ const Root = ({ state }) => {
                 font-family: system-ui, Verdana, Arial, sans-sarif;
             }
         `} />
-            <Header>
+            <Header isPostType={data.isPostType} isPage={data.isPage}>
                 <HeaderContent>
                     <h1>Hello Frontity</h1>
-                    <p>Current URL: {state.router.link}</p>
-                    <nav>
+                    {/* {state.theme.isUrlVisible ? <p>Current URL: {state.router.link}</p> : null} */}
+                    {
+                      state.theme.isUrlVisible ?
+                      <>Current URL: {state.router.link}<Button onClick={actions.theme.toggleUrl}>&#x3c; Hide URL</Button></>
+                      :
+                      <Button onClick={actions.theme.toggleUrl}>Show URL &#x3e;</Button>
+                    }
+                    
+                    <Menu>
                         <Link link="/">Home</Link><br/>
-                        <Link link="/page/2">More Posts</Link><br/>
                         <Link link="/about-us">About-us</Link><br/>
-                    </nav>
+                    </Menu>
                 </HeaderContent>
             </Header>
             <Main>
@@ -38,6 +44,7 @@ const Root = ({ state }) => {
                     <Page when={data.isPage} />
                 </Switch>
             </Main>
+            
         </>
     );
 }
@@ -48,7 +55,7 @@ const Header = styled.header`
 background-color: #e5edee;
 border-width: 0 0 8px 0;
 border-style: solid;
-border-color: maroon;
+border-color: ${props => props.isPostType ? (props.isPage? "lightsteelblue": "lightseagreen") : "maroon"};
 
 h1 {
   color: #4a4a4a;
@@ -78,5 +85,25 @@ const Main = styled.main`
     color: #828282;
     font-size: 0.8em;
     margin-bottom: 1em;
+  }
+`;
+const Menu = styled.nav`
+  display: flex;
+  flex-direction: row;
+  margin-top: 1em;
+  & > a {
+    margin-right: 1em;
+    color: steelblue;
+    text-decoration: none;
+  }
+`;
+const Button = styled.button`
+  background: transparent;
+  border: none;
+  color: #aaa;
+
+  :hover {
+    cursor: pointer;
+    color: #888;
   }
 `;

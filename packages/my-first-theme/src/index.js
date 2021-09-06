@@ -6,10 +6,18 @@ const myFirstTheme = {
     theme: Root
   },
   state: {
-    theme: {}
+    theme: {
+      isUrlVisible: false,
+
+    }
   },
   actions: {
-    theme: {}
+    theme: {
+      toggleUrl: ({ state }) => {
+        console.log("here");
+        state.theme.isUrlVisible = !state.theme.isUrlVisible
+      },
+    }
   }
 };
 
